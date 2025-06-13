@@ -1,23 +1,23 @@
 #include <Stepper.h>
 
-// Motor
+// Motor paso a paso
 const int stepsPerRevolution = 2048;
-Stepper myStepper(stepsPerRevolution, 8, 10, 9, 11);
+Stepper myStepper(stepsPerRevolution, 13, 11, 12, 10); // IN1-IN4 orden correcto
 
 // Botones
-const int btnForward = 6;
-const int btnBackward = 7;
+const int btnForward = 2;
+const int btnBackward = 3;
 bool lastBtnFwd = HIGH;
 bool lastBtnBwd = HIGH;
 
 // Sensor TCRT5000
 const int sensorA0 = A0;
-const int ledPin = 5;
+const int ledIR = 5;
 const int umbralCercania = 500;
 
 // Beam sensor y LED indicador
 const int beamPin = 4;
-const int ledBeam = 3;
+const int ledBeam = 6;
 
 void setup() {
   // Motor
@@ -27,16 +27,16 @@ void setup() {
   pinMode(btnForward, INPUT_PULLUP);
   pinMode(btnBackward, INPUT_PULLUP);
 
-  // Sensor TCRT5000
-  pinMode(ledPin, OUTPUT);
+  // Sensor IR
+  pinMode(ledIR, OUTPUT);
 
-  // Beam sensor y LED externo
-  pinMode(beamPin, INPUT);        // Si no funciona prueba INPUT_PULLUP
+  // Beam sensor
+  pinMode(beamPin, INPUT); // Prueba con INPUT_PULLUP si no detecta
   pinMode(ledBeam, OUTPUT);
 
-  // Serial
+  // Comunicación serial
   Serial.begin(9600);
-  Serial.println("Sistema combinado listo.");
+  Serial.println("✅ Sistema listo con pines actualizados.");
 }
 
 void loop() {
@@ -47,25 +47,23 @@ void loop() {
 
   if (lectura > umbralCercania) {
     Serial.print(" --> 🟢 LIBRE   ");
-    digitalWrite(ledPin, LOW);
+    digitalWrite(ledIR, LOW);
   } else {
     Serial.print(" --> 🔴 CERCA   ");
-    digitalWrite(ledPin, HIGH);
+    digitalWrite(ledIR, HIGH);
   }
 
   // --- BEAM SENSOR ---
   int beamState = digitalRead(beamPin);
   if (beamState == LOW) {
-    // Haz interrumpido: LED ON
     digitalWrite(ledBeam, HIGH);
     Serial.println("🌑 HAZ INTERRUMPIDO -> LED ENCENDIDO");
   } else {
-    // Haz libre: LED OFF
     digitalWrite(ledBeam, LOW);
     Serial.println("☀️ HAZ LIBRE -> LED APAGADO");
   }
 
-  // --- BOTONES CON FLANCO DESCENDENTE ---
+  // --- BOTONES (Flanco descendente) ---
   bool currentBtnFwd = digitalRead(btnForward);
   bool currentBtnBwd = digitalRead(btnBackward);
 

@@ -5,7 +5,7 @@ Each button press moves the motor **one fifteenth of a full revolution** (1/15 t
 
 ---
 
-## 📦 Bill of Materials
+## Bill of Materials
 - **Arduino** (Uno, Mega, Nano or compatible)
 - **28BYJ-48** 5V, 4-phase stepper motor
 - **ULN2003** driver board
@@ -16,7 +16,7 @@ Each button press moves the motor **one fifteenth of a full revolution** (1/15 t
 
 ---
 
-## 🔌 Wiring
+##  Wiring
 
 ### Stepper Motor (ULN2003 ↔ Arduino)
 | ULN2003 Pin | Arduino Pin |
@@ -38,7 +38,7 @@ Each button press moves the motor **one fifteenth of a full revolution** (1/15 t
 
 ---
 
-## ⚙️ How It Works
+##  How It Works
 - `stepsPerRevolution = 2048` (typical for 28BYJ-48 with gearbox)
 - Each press moves `2048 / 15 ≈ 136.5` steps → **24° per press**
 - Uses `delay(100)` for simple debounce
@@ -46,7 +46,7 @@ Each button press moves the motor **one fifteenth of a full revolution** (1/15 t
 
 ---
 
-## 💻 Arduino Code
+##  Arduino Code
 
 ```cpp
 #include <Stepper.h>

@@ -1,0 +1,50 @@
+#include <Stepper.h>
+
+// --- CONFIGURACIÓN GLOBAL ---
+
+// Motor paso a paso
+const int stepsPerRevolution = 2048;
+Stepper myStepper(stepsPerRevolution, 13, 11, 12, 10); // IN1-IN4 correcto orden
+
+// Botones
+const int btnForward = 2;
+const int btnBackward = 3;
+bool lastBtnFwd = HIGH;
+bool lastBtnBwd = HIGH;
+
+// --- SETUP ---
+
+void setup() {
+  myStepper.setSpeed(10);
+
+  pinMode(btnForward, INPUT_PULLUP);
+  pinMode(btnBackward, INPUT_PULLUP);
+
+  Serial.begin(9600);
+  Serial.println("✅ Sistema ready");
+}
+
+// --- LOOP ---
+
+void loop() {
+  // Lectura de botones
+  bool currentBtnFwd = digitalRead(btnForward);
+  bool currentBtnBwd = digitalRead(btnBackward);
+
+  // Botón hacia adelante
+  if (lastBtnFwd == HIGH && currentBtnFwd == LOW) {
+    Serial.println("➡️ 1/15 turn");
+    myStepper.step(stepsPerRevolution / 15);
+  }
+
+  // Botón hacia atrás
+  if (lastBtnBwd == HIGH && currentBtnBwd == LOW) {
+    Serial.println("⬅️  1/15 turn");
+    myStepper.step(-stepsPerRevolution / 15);
+  }
+
+  lastBtnFwd = currentBtnFwd;
+  lastBtnBwd = currentBtnBwd;
+
+  delay(100); // Anti-rebote
+}
